@@ -1,0 +1,34 @@
+from sqlalchemy import create_engine
+import pandas as pd
+from datetime import datetime
+fhand = open("upload1.txt","a")
+def pr(s):
+    print(s)
+    fhand.write(s)
+pr(f"Program started at : {str(datetime.now())}")
+db_username = 'suresh'
+db_password = 's1u2r3e4'
+db_host = "postgresql-152351-0.cloudclusters.net"
+db_port = '19991'
+db_name = 'finflash'
+
+db_string = f'postgresql://{db_username}:{db_password}@{db_host}:{db_port}/{db_name}'
+print("start")
+
+not_done = ['KAJARIACER', 'KPIL', 'KARURVYSYA', 'CUMMINSIND', 'KOTAKBANK', 'KSB', 'TRENT', 'LAXMIMACH', 'LICHSGFIN', 'M&M', 'RAMCOCEM', 'INDIGOPNTS', 'HOMEFIRST', 'MASTEK', 'MFSL', 'BDL', 'BOSCHLTD', 'BANDHANBNK', 'MRF', 'MRPL']
+l6 = ['CHEMPLASTS', 'VIJAYA', 'CUB', 'CYIENT', 'IBULHSGFIN', 'AXISBANK', 'INTELLECT', 'ATGL', 'NATIONALUM', 'POLICYBZR', 'PAYTM', 'SAPPHIRE', 'JINDALSTEL', 'LATENTVIEW', 'GOCOLORS', 'BSOFT', 'STARHEALTH', 'MAPMYINDIA', 'HCLTECH', 'METROBRAND', 'MEDPLUS', 'DATAPATTNS', 'RAJESHEXPO', 'GLENMARK', 'ZYDUSLIFE', 'AVANTIFEED', 'MAHLIFE', 'DALBHARAT', 'AWL', 'MANYAVAR', 'TVSMOTOR', 'CHALET', 'NLCINDIA', 'MSUMI', 'GAEL', 'BCG', 'USHAMART', 'TTML', 'STLTECH', 'IOB']
+
+engine = create_engine(db_string)
+print("Engine")
+i = 1
+for name in l6:
+    pr(f"{i}/{len(l6)} Started downloading for: {name}, {str(datetime.now())}       ",)
+    df = pd.read_csv(f"modifiednifty500/{name}.csv")
+    df.to_sql('nse_stocck_1min_cleaned', engine, if_exists='append',index=False,chunksize=10000)
+    # print(f"{name}")
+    i+=1
+    pr(f"Completed downloading at, {datetime.now()}\n")
+
+engine.dispose()
+pr("Program disposed: "+ str(datetime.now()))
+pr("\n\n")
